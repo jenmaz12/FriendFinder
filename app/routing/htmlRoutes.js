@@ -6,11 +6,11 @@ function htmlRoutes(app) {
     });
 
     app.get("/", function(req, res) {
-        res.json(path.join(__dirname, "../public/home.html"));
+        res.json(path.join(__dirname, "/../public/home.html"));
       });      
 
     app.use(function(req, res) {
-        res.sendFile(path.join(__dirname, "../public/home.html"));
+        res.sendFile(path.join(__dirname, "/../public/home.html"));
     });
 };
 
