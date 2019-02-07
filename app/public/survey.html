@@ -4,14 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>FriendFinder</title>
+    <title>FriendFinder | Survey</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
         crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="../../server.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -190,6 +191,28 @@
             <br>
             <button type="submit" class="btn btn-primary btn-lg btn-block" id="submit">Submit</button>
         </form>
+
+        <!-- Modal -->
+        <div class="modal fade" id="resultsModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resultsModalLabel">Your Friend Match Is . . .</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h2 id="matchName"></h2>
+                        <img id="matchImg" src="" alt="Image Not Found" style="max-width: 350px">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <hr>
         <footer class="footer">
             <div class="container">
@@ -198,47 +221,73 @@
             </div>
         </footer>
     </div>
+
+    <script type="text/javascript">
+        var allFieldsCompleted;
+
+        $(document).ready(function () {
+            $("#submit").on("click", function (event) {
+                event.preventDefault();
+                checkIfComplete(function () {
+                    if (allFieldsCompleted) {
+                        collectData();
+                    }
+                    else {
+                        alert("Please answer all questions before submitting the survey!")
+                    }
+                });
+            });
+        });
+
+        function checkIfComplete(cb) {
+            var questionsComplete;
+            $(".chosen").each(function () {
+                if ($(this).val() === "") {
+                    questionsComplete = false;
+                }
+            })
+                .promise().done(function () {
+                    if (questionsComplete === false) {
+                        allFieldsCompleted = false;
+                    }
+                    else if ($("#name").val().trim() === "") {
+                        allFieldsCompleted = false;
+                    }
+                    else if ($("#photoLink").val().trim() === "") {
+                        allFieldsCompleted = false;
+                    }
+                    else {
+                        allFieldsCompleted = true;
+                    }
+
+                    cb();
+                });
+        }
+
+        function collectData() {
+            var newFriend = {
+                name: $("#name").val().trim(),
+                photo: $("#photoLink").val().trim(),
+                scores: []
+            };
+
+            $(".chosen").each(function () {
+                newFriend.scores.push(parseInt($(this).val()));
+            })
+                .promise().done(function () {
+                    let currentURL = window.location.origin;
+                    $.post(currentURL + "/api/friends", newFriend, function (data) {
+                        console.log(data);
+                        $('#matchName').text(data.name);
+                        $('#matchImg').attr('src', data.photo);
+                        $("#resultsModal").modal('toggle');
+                    });
+                });
+            $("#survey").trigger("reset");
+        }
+
+    </script>
+
 </body>
 
 </html>
-
-<script type="text/javascript">
-    $("#submit").on("click", function (event) {
-        event.preventDefault();
-
-        var newFriend = {
-            name: $("#name").val().trim(),
-            photo: $("#photoLink").val().trim(),
-            scores: []
-        };
-
-        for (var i = 1; i < 11; i++) {
-            newFriend.scores.push(parseInt($("#q" + i).val()));
-        };
-
-        $.post("/api/friends", newFriend, function (data) {
-            if (data) {
-                alert("Yay! Get ready to meet your best friend!");
-            }
-            else {
-                alert("Sorry, something went wrong . . .");
-            }
-
-            $("#survey").reset();
-        })
-
-        $.get("/api/friends", function(data) {
-            console.log(data);
-            let totalDiffs = [];
-
-            data.forEach(function(user) {
-                let diffSum = 0;
-                for(let i = 0; i < user.scores.length; i++) {
-                    diffSum += Math.abs(user.scores[i] - newFriend.scores[i]);
-                };
-                totalDiffs.push(diffSum);
-                
-            })
-        })
-    })
-</script>
