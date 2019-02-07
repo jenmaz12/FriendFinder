@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
         crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -193,7 +192,7 @@
         </form>
 
         <!-- Modal -->
-        <div class="modal fade" id="resultsModal" role="dialog">
+        <div class="modal fade" id="resultsModal" role="dialog" aria-labelledby="resultsModal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -274,15 +273,13 @@
             $(".chosen").each(function () {
                 newFriend.scores.push(parseInt($(this).val()));
             })
-                .promise().done(function () {
-                    let currentURL = window.location.origin;
-                    $.post(currentURL + "/api/friends", newFriend, function (data) {
-                        console.log(data);
-                        $('#matchName').text(data.name);
-                        $('#matchImg').attr('src', data.photo);
-                        $("#resultsModal").modal('toggle');
-                    });
-                });
+            let currentURL = window.location.origin;
+            $.post(currentURL + "/api/friends", newFriend, function (data) {
+                console.log(data);
+                $('#matchName').text(data.name);
+                $('#matchImg').attr('src', data.photo);
+                $("#resultsModal").modal('show');
+            });
             $("#survey").trigger("reset");
         }
 
