@@ -226,5 +226,19 @@
 
             $("#survey").reset();
         })
+
+        $.get("/api/friends", function(data) {
+            console.log(data);
+            let totalDiffs = [];
+
+            data.forEach(function(user) {
+                let diffSum = 0;
+                for(let i = 0; i < user.scores.length; i++) {
+                    diffSum += Math.abs(user.scores[i] - newFriend.scores[i]);
+                };
+                totalDiffs.push(diffSum);
+                
+            })
+        })
     })
 </script>
