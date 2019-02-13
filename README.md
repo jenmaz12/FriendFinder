@@ -9,7 +9,6 @@ The application also allows the user to view all of friends in the data set by u
 
 The HTML files are displayed using GET routes to the HTML file.
 
-![FriendFinder Home](/images/home.png | width=800x)
 <img src="/images/home.png" width="800px">
-![FriendFinder Survey](/images/survey.png "FriendFinder Survey")
-![FriendFinder Result](/images/result.png "FriendFinder Result")
+<img src="/images/survey.png" width="800px">
+<img src="/images/result.png" width="800px">
