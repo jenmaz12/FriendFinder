@@ -9,6 +9,6 @@ The application also allows the user to view all of friends in the data set by u
 
 The HTML files are displayed using GET routes to the HTML file.
 
-<img src="/images/home.png" width="800px">
-<img src="/images/survey.png" width="800px">
-<img src="/images/result.png" width="800px">
+<img src="/images/home.png" width=800px>
+<img src="/images/survey.png" width=800px>
+<img src="/images/result.png" width=800px>
