@@ -7,4 +7,8 @@ This application uses an API route to POST the user's survey results to a data J
 
 The application also allows the user to view all of friends in the data set by using a GET API route.
 
-The HTML files are displayed using GET routes to the HTML file. 
+The HTML files are displayed using GET routes to the HTML file.
+
+![FriendFinder Home](/images/home.png "FriendFinder Home")
+![FriendFinder Survey](/images/survey.png "FriendFinder Survey")
+![FriendFinder Result](/images/result.png "FriendFinder Result")
